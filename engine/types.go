@@ -9,5 +9,12 @@ type Request struct {
 // 接收处理结果
 type ParseResult struct {
 	Requests []Request
-	Items    []interface{}
+	Items    []Item
+}
+
+type Item struct {
+	Url     string
+	Id      string
+	Type    string
+	Payload interface{}
 }

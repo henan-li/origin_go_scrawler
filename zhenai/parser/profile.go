@@ -10,8 +10,9 @@ import (
 var ageRe = regexp.MustCompile(`<td><span class="label">年龄: </span>([\d]+)岁</td>`)
 var eduRe = regexp.MustCompile(`<td><span class="label">学历: </span>([^<]+)</td>`)
 var geoRe = regexp.MustCompile(`<td><span class="label">籍贯: </span>([^<]+)</td>`)
+var idRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 
-func ParseProfile(contents []byte, name string) engine.ParseResult {
+func ParseProfile(contents []byte, name string, url string) engine.ParseResult {
 
 	profile := model.Profile{}
 
@@ -33,7 +34,14 @@ func ParseProfile(contents []byte, name string) engine.ParseResult {
 	}
 
 	result := engine.ParseResult{
-		Items: []interface{}{profile},
+		Items: []engine.Item{
+			{
+				Url:     url,
+				Id:      extractString([]byte(url),idRe),
+				Type:    "zhenai",
+				Payload: profile,
+			},
+		},
 	}
 
 	return result
